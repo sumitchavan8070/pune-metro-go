@@ -1,0 +1,11 @@
+package_rename_config:
+  android:
+    app_name: "PuneMetro Go" # Display name
+    package_name: "com.smt.punemetrogo" # Package name
+    lang: "kotlin" # Optional: "kotlin" (default) or "java"
+
+  ios:
+    app_name: "PuneMetro Go" # Display name
+    bundle_name: "PuneMetro Go" # Bundle name
+    package_name: "com.smt.punemetrogo" # Product Bundle Identifier
+

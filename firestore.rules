@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{collection}/{document} {
+      allow read, write: if collection in [
+        'meta',
+        'metro_operators',
+        'data_sources',
+        'stations',
+        'metro_lines',
+        'line_stations',
+        'station_aliases',
+        'station_facilities',
+        'timetables',
+        'station_timetables',
+        'fares',
+        'interchanges',
+        'service_alerts',
+        'data_conflicts',
+        'import_logs'
+      ];
+    }
+
+    match /devices/{deviceId}/{collection}/{document} {
+      allow read, write: if collection in ['favourites', 'recent_journeys'];
+    }
+  }
+}
