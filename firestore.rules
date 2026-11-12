@@ -17,7 +17,8 @@ service cloud.firestore {
         'interchanges',
         'service_alerts',
         'data_conflicts',
-        'import_logs'
+        'import_logs',
+        'app_maintance'
       ];
     }
 

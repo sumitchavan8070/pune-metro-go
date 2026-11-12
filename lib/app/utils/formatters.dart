@@ -12,7 +12,7 @@ String normalizeStationName(String name) {
 
 String formatClock(String? hhmm) {
   if (hhmm == null || hhmm.isEmpty) {
-    return 'Not published';
+    return '—';
   }
   final parts = hhmm.split(':');
   if (parts.length < 2) {
@@ -28,9 +28,21 @@ String formatClock(String? hhmm) {
   return '$hour12:${minute.toString().padLeft(2, '0')} $suffix';
 }
 
+String formatMoney(String? currency, double? amount) {
+  if (amount == null) {
+    return '';
+  }
+  final whole = amount == amount.roundToDouble();
+  final text = whole ? amount.toStringAsFixed(0) : amount.toStringAsFixed(2);
+  if (currency == null || currency == 'INR') {
+    return '₹$text';
+  }
+  return '$currency $text';
+}
+
 String formatDate(String? iso) {
   if (iso == null || iso.isEmpty) {
-    return 'Not recorded';
+    return '—';
   }
   final parsed = DateTime.tryParse(iso);
   if (parsed == null) {
@@ -41,7 +53,7 @@ String formatDate(String? iso) {
 
 String formatKilometres(double? km) {
   if (km == null) {
-    return 'Not published';
+    return '—';
   }
   final rounded = (km * 1000).round() / 1000;
   final text = rounded.toString();

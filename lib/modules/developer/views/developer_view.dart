@@ -51,7 +51,7 @@ class DeveloperView extends GetView<DeveloperController> {
               Text('Missing coordinates: ${audit.missingCoordinates.isEmpty ? 'none' : audit.missingCoordinates.join(', ')}'),
               Text('Same normalised names: ${audit.duplicateNames.isEmpty ? 'none' : audit.duplicateNames.join('; ')}'),
               Text('Sequence issues: ${audit.sequenceIssues.isEmpty ? 'none' : audit.sequenceIssues.join('; ')}'),
-              const Text('Fare coverage is empty until a verified matrix is imported. The calculator says so instead of guessing.'),
+              const Text('Fares come from the published Purple and Aqua chart. Pairs that are not on that chart stay blank.'),
             ],
             const SizedBox(height: 16),
             Text('Sources', style: Theme.of(context).textTheme.titleMedium),

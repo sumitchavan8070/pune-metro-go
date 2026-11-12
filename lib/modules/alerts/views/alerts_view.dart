@@ -16,12 +16,10 @@ class AlertsView extends GetView<AlertsController> {
         () => ListView(
           padding: const EdgeInsets.all(AppDimensions.screenPadding),
           children: [
-            const Text('Only stored alerts inside their published time window are shown as active. Nothing is invented here.'),
-            const SizedBox(height: 12),
             if (controller.active.isEmpty)
               const PmEmptyState(
                 title: 'No active alerts',
-                message: 'The saved metro data has no service alert that is in force right now.',
+                message: 'There is no service alert in force right now.',
                 icon: Icons.campaign_outlined,
               )
             else
@@ -30,7 +28,7 @@ class AlertsView extends GetView<AlertsController> {
               const SizedBox(height: 16),
               Text('Expired', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
-              const Text('These notices are kept for the record and are not shown as active.'),
+              const Text('These notices are no longer in force.'),
               for (final alert in controller.expired) PmServiceAlertCard(alert: alert),
             ],
           ],

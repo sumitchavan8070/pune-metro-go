@@ -98,7 +98,7 @@ class JourneyPlannerService {
     if (found.isEmpty) {
       return const [
         JourneyPlan.failure(
-          'No passenger route is available with the stations that are open in the stored data.',
+          'No route is available between these stations.',
         ),
       ];
     }
@@ -309,7 +309,7 @@ class JourneyPlannerService {
         minutes = (table!.endToEndMinutes! * intervals / total).round();
         note = AppConstants.estimateMethod;
       } else {
-        note = '${line.name} has no published end-to-end time, so this leg is not given a duration.';
+        note = '${line.name} does not include a travel time for this leg.';
       }
       legs.add(
         JourneyLeg(
@@ -333,13 +333,13 @@ class JourneyPlannerService {
       flush();
       if (hop is _SameStation) {
         notices.add(
-          'Change at ${stations[hop.stationId]?.name ?? 'the interchange'}. Transfer time inside the station was not published and is not included.',
+          'Change at ${stations[hop.stationId]?.name ?? 'the interchange'}. Transfer time is not included.',
         );
       } else if (hop is _Walk) {
         if (hop.minutes == null) {
           walkingIncomplete = true;
           notices.add(
-            '${hop.name}: walking time between ${stations[hop.fromId]?.name ?? 'one station'} and ${stations[hop.toId]?.name ?? 'the other'} was not published and is not included.',
+            '${hop.name}: walking time between ${stations[hop.fromId]?.name ?? 'one station'} and ${stations[hop.toId]?.name ?? 'the other'} is not included.',
           );
         } else {
           walking += hop.minutes!;
@@ -348,24 +348,14 @@ class JourneyPlannerService {
     }
     flush();
 
-    final reported = <String>{};
     for (final leg in legs) {
       for (final stop in leg.stops) {
-        if (stop.station.operationalStatus == 'reported_open' ||
-            stop.station.operationalStatus == 'reported_closed') {
-          reported.add(stop.station.name);
-        }
         if (!stop.boards && stop != leg.stops.first && stop != leg.stops.last) {
           notices.add(
-            '${stop.station.name} is ${operationalStatus(stop.station.operationalStatus).label}. It stays in the sequence. Whether trains pass it without stopping was not published.',
+            '${stop.station.name} is ${operationalStatus(stop.station.operationalStatus).label}. It stays in the sequence.',
           );
         }
       }
-    }
-    if (reported.isNotEmpty) {
-      notices.add(
-        'Opening status for ${reported.join(', ')} comes from a secondary report, not from an operator station-status table.',
-      );
     }
     if (legs.any((leg) => leg.estimatedMinutes != null)) {
       notices.add(AppConstants.estimateMethod);
@@ -376,7 +366,7 @@ class JourneyPlannerService {
             (walkingIncomplete ? 0 : walking)
         : null;
     if (minutes == null) {
-      notices.add('A complete journey time is not shown because at least one leg has no published duration.');
+      notices.add('A complete journey time is not shown for this route.');
     }
 
     return JourneyPlan(

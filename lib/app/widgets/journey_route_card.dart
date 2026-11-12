@@ -23,7 +23,7 @@ class JourneyRouteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final muted = AppColors.textSecondary(Theme.of(context).brightness);
     final duration = plan.estimatedMinutes == null
-        ? 'Duration not published for every leg'
+        ? 'Duration not listed for every leg'
         : 'Estimated about ${plan.estimatedMinutes} min';
     return PmCard(
       child: Column(

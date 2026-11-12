@@ -46,14 +46,14 @@ class MoreView extends StatelessWidget {
                 _tile(
                   context,
                   'Fare calculator',
-                  'Only a verified fare is shown',
+                  'Published Purple and Aqua chart',
                   Icons.payments_outlined,
                   AppRoutes.fares,
                 ),
                 _tile(
                   context,
                   'Service alerts',
-                  'Stored notices that are still in date',
+                  'Notices that are still in date',
                   Icons.campaign_outlined,
                   AppRoutes.alerts,
                 ),

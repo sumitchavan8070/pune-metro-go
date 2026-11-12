@@ -50,7 +50,7 @@ class TimetableView extends GetView<TimetableController> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Scheduled service windows. This screen does not track trains.',
+                      'First train, last train, and frequency. This screen does not track trains.',
                       style: AppTextStyles.bodyMedium.copyWith(color: muted),
                     ),
                   ),
@@ -89,7 +89,7 @@ class TimetableView extends GetView<TimetableController> {
             Text('Service day', style: AppTextStyles.titleMedium),
             const SizedBox(height: 8),
             if (dayTypes.isEmpty)
-              Text('No day types are published for this line.', style: AppTextStyles.bodyMedium.copyWith(color: muted))
+              Text('No service days are listed for this line.', style: AppTextStyles.bodyMedium.copyWith(color: muted))
             else
               Wrap(
                 spacing: 8,
@@ -115,7 +115,7 @@ class TimetableView extends GetView<TimetableController> {
             if (current.isEmpty)
               const PmEmptyState(
                 title: 'No current timetable',
-                message: 'A verified first and last train is not stored for this line and day.',
+                message: 'First and last train are not listed for this line and day.',
                 icon: Icons.schedule,
               )
             else
@@ -144,7 +144,7 @@ class TimetableView extends GetView<TimetableController> {
   String _dayLabel(String type) {
     switch (type) {
       case 'all_days':
-        return 'All published days';
+        return 'All days';
       case 'weekday':
         return 'Weekday';
       case 'saturday':

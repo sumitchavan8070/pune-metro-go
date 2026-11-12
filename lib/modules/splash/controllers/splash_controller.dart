@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:pune_metro_guide/app/routes/app_routes.dart';
-import 'package:pune_metro_guide/data/services/import_service.dart';
+import 'package:pune_metro_guide/app/startup/app_startup.dart';
+import 'package:pune_metro_guide/app/widgets/app_update_dialog.dart';
 
 class SplashController extends GetxController {
   final loading = true.obs;
@@ -16,7 +17,17 @@ class SplashController extends GetxController {
     loading.value = true;
     error.value = null;
     try {
-      await Get.find<ImportService>().ensureImported();
+      final gate = await AppStartup.evaluate();
+      if (gate.kind == AppGateKind.maintenance) {
+        loading.value = false;
+        await Get.offAllNamed(AppRoutes.maintenance, arguments: gate.release);
+        return;
+      }
+      if (gate.kind == AppGateKind.forceUpdate) {
+        loading.value = false;
+        await showAppUpdateDialog(gate.release, force: true);
+        return;
+      }
       await Get.offAllNamed(AppRoutes.shell);
     } catch (caught) {
       final detail = caught.toString();

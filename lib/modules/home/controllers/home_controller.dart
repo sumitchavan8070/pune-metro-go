@@ -30,8 +30,6 @@ class HomeController extends GetxController {
   final loading = true.obs;
   final nearbyLoading = false.obs;
   final nearbyMessage = RxnString();
-  final extractedAt = RxnString();
-  final importedAt = RxnString();
   final operationalCounts = <int, int>{}.obs;
   final error = RxnString();
   final searchController = TextEditingController();
@@ -65,9 +63,6 @@ class HomeController extends GetxController {
       }
       operationalCounts.assignAll(counts);
       alerts.assignAll(await Get.find<AlertRepository>().active());
-      final meta = await metro.meta();
-      extractedAt.value = meta['extracted_at'];
-      importedAt.value = meta['imported_at'];
     } catch (caught) {
       error.value = 'Home data could not be loaded. $caught';
     } finally {
@@ -122,10 +117,7 @@ class HomeController extends GetxController {
         return;
       }
       _showNearest(stations, outcome.fix!);
-      final missing = stations.where((station) => !station.hasCoordinates).length;
-      nearbyMessage.value = missing == 0
-          ? null
-          : '$missing stations have no published coordinate, so they are left out of this list.';
+      nearbyMessage.value = null;
     } finally {
       nearbyLoading.value = false;
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pune_metro_guide/data/repositories/fare_repository.dart';
 import 'package:pune_metro_guide/data/repositories/metro_repository.dart';
 import 'package:pune_metro_guide/data/repositories/timetable_repository.dart';
 import 'package:pune_metro_guide/models/interchange_model.dart';
@@ -74,10 +75,14 @@ class StationDetailController extends GetxController {
 class StationPickerController extends GetxController {
   final results = <StationModel>[].obs;
   final loading = true.obs;
+  final chartReady = true.obs;
   final searchController = TextEditingController();
+  late final bool chartOnly;
+  Set<int> _chartIds = {};
 
   @override
   void onInit() {
+    chartOnly = Get.arguments == 'fare';
     super.onInit();
     load();
   }
@@ -89,7 +94,18 @@ class StationPickerController extends GetxController {
   }
 
   Future<void> load() async {
-    results.assignAll(await Get.find<MetroRepository>().allStations());
+    final stations = await Get.find<MetroRepository>().allStations();
+    if (chartOnly) {
+      final fares = await Get.find<FareRepository>().all();
+      _chartIds = {
+        for (final fare in fares) ...[fare.originStationId, fare.destinationStationId],
+      };
+      chartReady.value = _chartIds.isNotEmpty;
+      results.assignAll(stations.where((station) => _chartIds.contains(station.id)));
+    } else {
+      chartReady.value = true;
+      results.assignAll(stations);
+    }
     loading.value = false;
   }
 
@@ -98,6 +114,14 @@ class StationPickerController extends GetxController {
       await load();
       return;
     }
-    results.assignAll(await Get.find<MetroRepository>().search(value));
+    if (chartOnly && _chartIds.isEmpty) {
+      await load();
+    }
+    final found = await Get.find<MetroRepository>().search(value);
+    if (chartOnly) {
+      results.assignAll(found.where((station) => _chartIds.contains(station.id)));
+      return;
+    }
+    results.assignAll(found);
   }
 }

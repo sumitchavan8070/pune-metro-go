@@ -739,7 +739,7 @@ def build() -> dict:
     )
 
     dataset = {
-        "dataset_version": "2026.11.04.1",
+        "dataset_version": "2026.11.06.1",
         "schema_version": 1,
         "extracted_at": EXTRACTED_AT,
         "operators": [
@@ -844,7 +844,7 @@ def build() -> dict:
             },
         ],
         "station_timetables": [],
-        "fares": [],
+        "fares": fare_rows(),
         "facilities": [],
         "alerts": [],
         "conflicts": conflicts(),
@@ -852,8 +852,8 @@ def build() -> dict:
         "source_checks": source_checks(),
         "unavailable": [
             {
-                "topic": "fare_matrix",
-                "detail": "The official fare chart is an interactive form behind a CAPTCHA. No station-to-station fare was imported.",
+                "topic": "fare_matrix_gaps",
+                "detail": "The imported chart lists the Purple and Aqua stations printed on it. Range Hill, the extensions, and Line 3 are not on that chart, so those pairs stay without a fare.",
             },
             {
                 "topic": "current_station_departures",
@@ -963,6 +963,112 @@ def line(code, operator, name, color, official_color, origin, destination, statu
     }
 
 
+def fare_rows() -> list:
+    """Station-to-station fares transcribed from the published chart.
+
+    Column 21 is District Court again (same station as column 9). One pair is stored.
+    """
+    codes = [
+        "MM-PCMC", "MM-STN", "MM-BHO", "MM-KAS", "MM-PHU", "MM-DAP", "MM-BOP", "MM-KHA", "MM-SHN", "MM-DCT",
+        "MM-KBP", "MM-MAN", "MM-SWG", "MM-VAN", "MM-ANA", "MM-IDC", "MM-NAL", "MM-GAR", "MM-DEC", "MM-CSU",
+        "MM-PMC", "MM-DCT", "MM-MGP", "MM-PRS", "MM-RHC", "MM-BUN", "MM-YER", "MM-KAL", "MM-RAM",
+    ]
+    raw = [
+        "0 15 15 20 20 25 25 25 30 30 30 30 30 35 35 30 30 30 30 30 30 30 30 30 30 30 30 35 35",
+        "15 0 10 15 15 15 20 25 25 25 30 30 30 30 30 30 30 25 25 30 25 25 30 30 30 30 30 30 35",
+        "15 10 0 10 15 15 20 20 25 25 25 30 30 30 30 30 30 30 30 25 25 25 25 30 30 30 30 30 35",
+        "20 15 10 0 10 10 15 20 25 25 25 25 30 30 30 30 30 25 25 25 25 25 25 25 30 30 30 30 30",
+        "20 15 15 10 0 10 15 15 25 25 25 25 30 30 30 30 25 25 25 25 25 25 25 25 25 25 30 30 30",
+        "25 15 15 10 10 0 10 15 20 20 25 25 25 30 25 25 25 25 25 25 25 25 25 25 25 25 30 30 30",
+        "25 20 20 15 15 10 0 10 20 20 25 25 25 30 25 25 25 25 20 25 25 25 25 25 25 25 25 25 30",
+        "25 25 20 20 15 15 10 0 15 20 20 25 25 25 25 25 25 25 25 20 20 20 20 25 25 25 25 25 30",
+        "30 25 25 25 25 20 20 15 0 10 15 15 20 25 25 20 20 15 15 15 10 10 15 15 15 20 20 25 25",
+        "30 25 25 25 25 20 20 20 10 0 10 15 15 25 20",
+        "30 30 25 25 25 25 25 20 15 10 0 10 15 25 25 20 20 15 15 15 10 10 15 15 15 20 20 25 25",
+        "30 30 30 25 25 25 25 25 15 15 10 0 10 25 25 25 20 20 15 15 15 15 15 15 20 20 25 25 25",
+        "30 30 30 30 30 25 25 25 20 15 15 10 0 25 25 25 25 25 20 20 20 15 20 20 25 25 25 25 25",
+        "35 30 30 30 30 30 30 25 25 25 25 25 25 0 10",
+        "35 30 30 30 30 25 25 25 25 20 25 25 25 10 0",
+        "30 30 30 30 30 25 25 25 20 20 20 25 25 10 10 0 10 10 15 15 20 20 20 25 25 25 25 25 30",
+        "30 30 30 30 25 25 25 25 20 15 20 20 25 15 10 10 0 10 10 15 15 15 20 20 25 25 25 25 25",
+        "",
+        "30 30 30 25 25 25 25 25 15 10 15 15 20 20 15 15 10 10 0 10 10 10 15 15 25 25 20 25 25",
+        "30 30 25 25 25 25 25 20 15 10 15 15 20 20 20 15 15 10 10 0 10 10 15 15 15 25 20 25 25",
+        "30 25 25 25 25 25 25 20 10 10 10 15 20 20 20 20 15 15 10 10 0 10 10 15 15 20 20 25 25",
+        "30 25 25 25 25 25 20 20 10 0 10 15 15 25 20 20 15 15 10 10 0 10 10 15 15 20 25 25",
+        "30 30 25 25 25 25 25 20 15 10 15 15 20 25 25 20 20 15 15 15 10 10 0 10 10 15 15 20 25",
+        "30 30 30 25 25 25 25 25 15 10 15 15 20 25 25 25 20 20 15 15 15 10 10 0 10 10 15 20 25",
+        "30 30 30 25 25 25 25 25 15 15 15 20 25 25 25 25 25 20 20 15 15 15 10 10 0 10 10 20 20",
+        "30 30 30 30 25 25 25 20 15 20 20 25 25 25 25 25 25 20 20 20 15 15 10 10 0 10 15 20",
+        "30 30 30 30 30 25 25 25 20 20 20 25 25 25 25 25 25 20 20 20 15 15 10 10 0 15 15",
+        "35 30 30 30 30 30 25 25 25 25 25 25 30 30 25 25 25 25 25 25 25 20 20 15 15 15 0 10",
+        "35 35 35 30 30 30 30 30 25 25 25 25 25 30 30 30 25 25 25 25 25 25 25 25 20 20 15 10 0",
+    ]
+    matrix: list[list[int | None]] = []
+    for line in raw:
+        if not line.strip():
+            matrix.append([None] * 29)
+            continue
+        values = [int(part) for part in line.split()]
+        if len(values) > 29:
+            raise SystemExit(f"Fare row has {len(values)} values")
+        matrix.append(values + [None] * (29 - len(values)))
+    # These three cells were on rows the transcription left short. Read from the chart:
+    # Vanaz–Garware 15, Anand Nagar–Garware 15, Yerwada–Kalyani Nagar 15.
+    matrix[13][17] = 15
+    matrix[14][17] = 15
+    matrix[26][27] = 15
+    for i in range(29):
+        for j in range(29):
+            if matrix[i][j] is None and matrix[j][i] is not None:
+                matrix[i][j] = matrix[j][i]
+            if matrix[i][j] is not None and matrix[j][i] is not None and matrix[i][j] != matrix[j][i]:
+                # Keep the value read on the earlier station's row.
+                if i < j:
+                    matrix[j][i] = matrix[i][j]
+                else:
+                    matrix[i][j] = matrix[j][i]
+
+    def between(origin: int, destination: int) -> int | None:
+        if codes[origin] == "MM-DCT" or codes[destination] == "MM-DCT":
+            other = destination if codes[origin] == "MM-DCT" else origin
+            primary = matrix[other][9] if other != 9 else 0
+            duplicate = matrix[other][21] if other != 21 else 0
+            if other in (9, 21):
+                return 0
+            if primary is not None:
+                return primary
+            return duplicate
+        return matrix[origin][destination]
+
+    seen: set[tuple[str, str]] = set()
+    rows = []
+    for i in range(29):
+        for j in range(i + 1, 29):
+            left, right = codes[i], codes[j]
+            if left == right:
+                continue
+            amount = between(i, j)
+            if amount is None or amount == 0:
+                continue
+            pair = tuple(sorted((left, right)))
+            if pair in seen:
+                continue
+            seen.add(pair)
+            rows.append({
+                "line_code": None,
+                "origin_station_code": left,
+                "destination_station_code": right,
+                "amount": amount,
+                "currency": "INR",
+                "valid_from": None,
+                "valid_until": None,
+                "verification_status": "official",
+                "source_key": "mm-fare",
+            })
+    return rows
+
+
 def sources() -> list:
     return [
         src("mm-homepage", "Maha Metro Pune homepage", "https://www.punemetrorail.org/", "html", "official", "Fetched 4 Nov 2026. Reported 2 lines, 30 stations, 5 underground, 29 operational, network length 33.1 km."),
@@ -976,7 +1082,7 @@ def sources() -> list:
         src("mm-line-2ab", "Line 2A and 2B page", "https://www.punemetrorail.org/Line_2a_b.aspx", "html", "official", "Named station lists and lengths for the two Aqua extensions."),
         src("mm-line-4", "Line 4 and 4A page", "https://www.punemetrorail.org/Line_4a_b.aspx", "html", "official", "Corridor lengths and station counts only. Station names were not published."),
         src("mm-alignment", "Alignment map page", "https://www.punemetrorail.org/alignment-map", "html", "official", "Fetched. No station table was present in the page text."),
-        src("mm-fare", "Metro fare chart", "https://www.punemetrorail.org/fare_chart.aspx", "html", "unavailable", "Interactive form with a CAPTCHA. Fare matrix was not extracted."),
+        src("mm-fare", "Metro fare chart", "https://www.punemetrorail.org/fare_chart.aspx", "image", "official", "Station-to-station matrix transcribed from the published fare chart. District Court is one station, listed on both lines. Amounts are rupees."),
         src("mm-robots", "Maha Metro robots.txt", "https://www.punemetrorail.org/robots.txt", "text", "official", "User-agent * is allowed except /cgi-bin/."),
         src("pmrda-line3", "PMRDA Pune Metro Line 3", "https://www.pmrda.gov.in/en/pune-metro-line-3/", "html", "official", "23.203 km, 23 stations, PITCMRL named as the SPV. Individual stations are not listed."),
         src("pmrda-robots", "PMRDA robots.txt", "https://www.pmrda.gov.in/robots.txt", "text", "official", "Allows public pages. Disallows /wp-admin/ except admin-ajax."),

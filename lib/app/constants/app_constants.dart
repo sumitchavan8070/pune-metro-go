@@ -10,5 +10,5 @@ class AppConstants {
   static const String datasetAsset = 'assets/data/pune_metro_dataset.json';
 
   static const String estimateMethod =
-      'This estimate spreads the line\'s published end-to-end time across the station intervals actually travelled. It is not a timetable arrival and it is not a live prediction.';
+      'About this long for the stations on this line. Not a live arrival.';
 }

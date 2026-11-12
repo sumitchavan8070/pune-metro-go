@@ -99,11 +99,11 @@ class RouteMapView extends GetView<RouteMapController> {
             const SizedBox(height: 8),
             Expanded(
               child: line == null
-                  ? const PmEmptyState(title: 'No lines stored', message: 'The saved metro data has no lines to show.')
+                  ? const PmEmptyState(title: 'No lines', message: 'There are no metro lines to show.')
                   : stations.isEmpty
                       ? const PmEmptyState(
-                          title: 'No stations published',
-                          message: 'This corridor has no station list in the stored data.',
+                          title: 'No stations',
+                          message: 'This line has no stations to show.',
                           icon: Icons.route,
                         )
                       : controller.geographic.value
@@ -154,13 +154,13 @@ class _LineSummary extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${line.originName ?? 'Origin unpublished'}  →  ${line.destinationName ?? 'Destination unpublished'}',
+                '${line.originName ?? 'Start'}  →  ${line.destinationName ?? 'End'}',
                 style: AppTextStyles.titleMedium,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                stationCount == 0 ? 'No stations stored' : '$stationCount stations, in route order',
+                stationCount == 0 ? 'No stations' : '$stationCount stations, in route order',
                 style: AppTextStyles.caption.copyWith(color: muted),
               ),
             ],
@@ -522,7 +522,7 @@ class _CityMapState extends State<_CityMap> {
           child: points.isEmpty
               ? const PmEmptyState(
                   title: 'No pins for this line',
-                  message: 'None of these stations have a stored coordinate. Their names are in the station list.',
+                  message: 'This line cannot be pinned on the map. Station names are in the list.',
                   icon: Icons.location_off_outlined,
                 )
               : GoogleMap(

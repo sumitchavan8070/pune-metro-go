@@ -93,6 +93,7 @@ class JourneyPlannerController extends GetxController {
 
   void showOnMap() {
     if (Get.isRegistered<ShellController>()) {
+      Get.until((route) => route.isFirst);
       Get.find<ShellController>().select(2);
     }
   }

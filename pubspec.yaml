@@ -45,6 +45,9 @@ dependencies:
   firebase_core: ^5.1.0
   cloud_firestore: ^7.1.0
   google_maps_flutter: ^2.18.1
+  url_launcher: ^6.3.2
+  firebase_messaging: ^17.0.1
+  flutter_local_notifications: ^22.3.3
 
 dev_dependencies:
   flutter_test:
@@ -56,20 +59,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-package_rename_config:
-  android:
-    app_name: PuneMetro Go
-    package_name: com.smt.punemetrogo
-    lang: kotlin
-  ios:
-    app_name: PuneMetro Go
-    bundle_name: PuneMetro Go
-    package_name: in.punemetro.guide.puneMetroGuide
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+  # For information on the generic Dart part of this file, see the
+  # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter packages.
+  # The following section is specific to Flutter packages.
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -80,6 +74,7 @@ flutter:
     - assets/data/pune_metro_dataset.json
     - assets/data/PuneMetroGo.png
     - assets/data/splash_screen.png
+    - assets/explore/
 
   fonts:
     - family: Inter

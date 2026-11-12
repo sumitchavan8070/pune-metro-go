@@ -4,7 +4,7 @@ class FareCalculatorService {
   const FareCalculatorService();
 
   static const unavailableMessage =
-      'Verified fare information is unavailable. Maha Metro\'s fare page is an interactive form behind a CAPTCHA, and no official station-to-station fare table was imported. Older guide prices were not used because that document describes an earlier stage of the network.';
+      'No fare from the imported chart matches this pair. The chart covers the Purple and Aqua stations printed on it. Range Hill, the extensions, and Line 3 are not on that chart.';
 
   FareQuote quote({
     required int originId,
@@ -42,7 +42,7 @@ class FareCalculatorService {
       final amounts = matches.map((fare) => fare.amount).toSet();
       if (amounts.length > 1) {
         return FareQuote.unavailable(
-          'More than one verified fare is stored for this pair, and the values disagree. No fare is shown until the conflict is reviewed.',
+          'This fare is unavailable right now.',
         );
       }
     }

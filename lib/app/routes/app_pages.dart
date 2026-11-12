@@ -2,8 +2,14 @@ import 'package:get/get.dart';
 import 'package:pune_metro_guide/app/routes/app_routes.dart';
 import 'package:pune_metro_guide/modules/alerts/bindings/alerts_binding.dart';
 import 'package:pune_metro_guide/modules/alerts/views/alerts_view.dart';
+import 'package:pune_metro_guide/modules/explore/bindings/explore_binding.dart';
+import 'package:pune_metro_guide/modules/explore/views/explore_detail_view.dart';
+import 'package:pune_metro_guide/modules/explore/views/explore_view.dart';
 import 'package:pune_metro_guide/modules/developer/bindings/developer_binding.dart';
 import 'package:pune_metro_guide/modules/developer/views/developer_view.dart';
+import 'package:pune_metro_guide/modules/journey_planner/views/journey_planner_view.dart';
+import 'package:pune_metro_guide/modules/maintenance/bindings/maintenance_binding.dart';
+import 'package:pune_metro_guide/modules/maintenance/views/maintenance_view.dart';
 import 'package:pune_metro_guide/modules/fare_calculator/bindings/fare_binding.dart';
 import 'package:pune_metro_guide/modules/fare_calculator/views/fare_view.dart';
 import 'package:pune_metro_guide/modules/metro_lines/bindings/line_binding.dart';
@@ -31,10 +37,14 @@ class AppPages {
     GetPage(name: AppRoutes.line, page: () => const LineDetailView(), binding: LineDetailBinding()),
     GetPage(name: AppRoutes.station, page: () => const StationDetailView(), binding: StationDetailBinding()),
     GetPage(name: AppRoutes.pickStation, page: () => StationPickerView(), binding: StationPickerBinding()),
+    GetPage(name: AppRoutes.plan, page: () => const JourneyPlannerView()),
     GetPage(name: AppRoutes.timetable, page: () => const TimetableView(), binding: TimetableBinding()),
     GetPage(name: AppRoutes.fares, page: () => const FareView(), binding: FareBinding()),
     GetPage(name: AppRoutes.alerts, page: () => const AlertsView(), binding: AlertsBinding()),
+    GetPage(name: AppRoutes.explorePlace, page: () => const ExploreDetailView(), binding: ExploreDetailBinding()),
+    GetPage(name: AppRoutes.explore, page: () => const ExploreView(), binding: ExploreBinding()),
     GetPage(name: AppRoutes.settings, page: () => const SettingsView(), binding: SettingsBinding()),
     GetPage(name: AppRoutes.developer, page: () => const DeveloperView(), binding: DeveloperBinding()),
+    GetPage(name: AppRoutes.maintenance, page: () => const MaintenanceView(), binding: MaintenanceBinding()),
   ];
 }

@@ -32,7 +32,7 @@ class PmServiceAlertCard extends StatelessWidget {
             ],
             const SizedBox(height: 8),
             Text(
-              '${alert.sourceName ?? 'Source recorded'} · ${formatDate(alert.startTime)} to ${formatDate(alert.endTime)}',
+              '${formatDate(alert.startTime)} to ${formatDate(alert.endTime)}',
               style: AppTextStyles.caption.copyWith(color: muted),
             ),
           ],

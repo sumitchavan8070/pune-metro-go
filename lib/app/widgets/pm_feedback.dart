@@ -126,25 +126,3 @@ class PmOfflineBanner extends StatelessWidget {
   }
 }
 
-class PmLastUpdatedLabel extends StatelessWidget {
-  const PmLastUpdatedLabel({super.key, this.extractedAt, this.importedAt});
-
-  final String? extractedAt;
-  final String? importedAt;
-
-  @override
-  Widget build(BuildContext context) {
-    final muted = AppColors.textSecondary(Theme.of(context).brightness);
-    return Text(
-      'Data extracted ${_short(extractedAt)} · saved on this phone ${_short(importedAt)}',
-      style: AppTextStyles.caption.copyWith(color: muted),
-    );
-  }
-
-  String _short(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'not recorded';
-    }
-    return value.length >= 10 ? value.substring(0, 10) : value;
-  }
-}

@@ -54,40 +54,21 @@ class LineDetailView extends GetView<LineDetailController> {
             Text(line.operatorName ?? '', style: AppTextStyles.bodyMedium.copyWith(color: muted)),
             const SizedBox(height: 8),
             PmStatusChip(status: line.operationalStatus),
-            const SizedBox(height: 8),
-            Text(operationalStatus(line.operationalStatus).explanation, style: AppTextStyles.bodySmall.copyWith(color: muted)),
             const SizedBox(height: 12),
             Text(
-              '${line.originName ?? 'Origin not published'} to ${line.destinationName ?? 'Destination not published'}',
+              '${line.originName ?? 'Start'} to ${line.destinationName ?? 'End'}',
               style: AppTextStyles.titleMedium,
             ),
             Text(
-              'Length ${formatKilometres(line.routeLengthKm)} (${verificationLabel(line.lengthVerification ?? 'unavailable')})',
+              'Length ${formatKilometres(line.routeLengthKm)}',
               style: AppTextStyles.bodySmall.copyWith(color: muted),
-            ),
-            if (!line.colorIsOfficial)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(
-                  'The colour on this screen is for display. An official line colour was not published in the sources checked.',
-                  style: AppTextStyles.bodySmall.copyWith(color: muted),
-                ),
-              ),
-            if (line.notes != null) ...[
-              const SizedBox(height: 12),
-              Text(line.notes!, style: AppTextStyles.bodyMedium),
-            ],
-            const SizedBox(height: 8),
-            Text(
-              'Source: ${line.sourceName ?? 'Recorded with the import.'} · ${verificationLabel(line.verificationStatus)}',
-              style: AppTextStyles.caption.copyWith(color: muted),
             ),
             const SizedBox(height: 18),
             Text('Stations', style: AppTextStyles.titleLarge),
             if (controller.stations.isEmpty)
               const Padding(
                 padding: EdgeInsets.only(top: 8),
-                child: Text('No station list was published for this corridor, so none is shown.'),
+                child: Text('No stations are listed for this line.'),
               )
             else
               PmRouteTimeline(
@@ -110,7 +91,7 @@ class LineDetailView extends GetView<LineDetailController> {
             Text('Service window', style: AppTextStyles.titleLarge),
             const SizedBox(height: 8),
             if (current.isEmpty)
-              Text('No current verified timetable is stored for this line.', style: AppTextStyles.bodyMedium)
+              Text('No service window is listed for this line.', style: AppTextStyles.bodyMedium)
             else
               TimetableCard(timetable: current.first, accent: color),
           ],

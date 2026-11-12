@@ -11,6 +11,7 @@ import 'package:pune_metro_guide/data/repositories/timetable_repository.dart';
 import 'package:pune_metro_guide/data/services/fare_calculator_service.dart';
 import 'package:pune_metro_guide/data/services/import_service.dart';
 import 'package:pune_metro_guide/data/services/journey_planner_service.dart';
+import 'package:pune_metro_guide/models/app_release_config.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +26,7 @@ void main() {
   test('reviewed dataset passes validation', () {
     final result = const DatasetValidator().validate(dataset);
     expect(result.errors, isEmpty, reason: result.errors.join('\n'));
-    expect(dataset['fares'], isEmpty);
+    expect((dataset['fares'] as List).length, 378);
     expect(dataset['station_timetables'], isEmpty);
   });
 
@@ -103,7 +104,8 @@ void main() {
       destinationId: byCode['MM-SWG']!.id,
       fares: await FareRepository(store).all(),
     );
-    expect(quote.available, isFalse);
+    expect(quote.available, isTrue);
+    expect(quote.amount, 30);
 
     final sndt = await metro.search('s.n.d.t');
     expect(sndt.map((station) => station.code), contains('MM-NAL'));
@@ -111,5 +113,48 @@ void main() {
     final rto = await metro.search('rto');
     expect(rto.map((station) => station.code), contains('MM-MGP'));
     expect(rto.singleWhere((station) => station.code == 'MM-MGP').aliasNames, contains('R.T.O Pune'));
+  });
+
+  test('release flags prompt only when the stored version is newer', () {
+    final current = AppReleaseConfig.fromMap({
+      'softupdate': 1,
+      'forceupdate': 1,
+      'servermaintance': 0,
+      'version': 6,
+      'title': 'Please update',
+      'message': 'Version 6 is available.',
+      'playstoreurl': 'https://play.google.com/store/apps/details?id=com.smt.punemetrogo',
+      'appstoreurl': '',
+    }, 6);
+    expect(current.showForce, isFalse);
+    expect(current.showSoft, isFalse);
+
+    final older = AppReleaseConfig.fromMap({
+      'softupdate': 0,
+      'forceupdate': 1,
+      'servermaintance': 0,
+      'version': 6,
+    }, 5);
+    expect(older.needsUpdate, isTrue);
+    expect(older.showForce, isTrue);
+    expect(older.showSoft, isFalse);
+
+    final soft = AppReleaseConfig.fromMap({
+      'softupdate': 1,
+      'forceupdate': 0,
+      'version': 6,
+    }, 1);
+    expect(soft.showSoft, isTrue);
+
+    final down = AppReleaseConfig.fromMap({
+      'servermaintance': 1,
+      'softupdate': 1,
+      'version': 6,
+      'title': 'Down',
+      'message': 'Back soon',
+    }, 1);
+    expect(down.serverMaintenance, isTrue);
+    expect(down.showSoft, isFalse);
+    expect(down.titleFor(maintenance: true), 'Down');
   });
 }

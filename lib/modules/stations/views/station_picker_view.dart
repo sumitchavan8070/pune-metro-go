@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pune_metro_guide/app/theme/app_colors.dart';
 import 'package:pune_metro_guide/app/theme/app_dimensions.dart';
+import 'package:pune_metro_guide/app/theme/app_text_styles.dart';
 import 'package:pune_metro_guide/app/widgets/pm_feedback.dart';
 import 'package:pune_metro_guide/app/widgets/pm_search_field.dart';
 import 'package:pune_metro_guide/app/widgets/pm_station_tile.dart';
@@ -11,7 +13,8 @@ class StationPickerView extends GetView<StationPickerController> {
 
   @override
   Widget build(BuildContext context) {
-    final selecting = Get.arguments == 'pick';
+    final selecting = Get.arguments == 'pick' || Get.arguments == 'fare';
+    final chartOnly = Get.arguments == 'fare';
     return Scaffold(
       appBar: AppBar(title: Text(selecting ? 'Choose a station' : 'Stations')),
       body: Obx(
@@ -20,26 +23,47 @@ class StationPickerView extends GetView<StationPickerController> {
           child: Column(
             children: [
               PmSearchField(controller: controller.searchController, onChanged: controller.search),
+              if (chartOnly) ...[
+                const SizedBox(height: 8),
+                Text(
+                  'Stations on the fare chart.',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.textSecondary(Theme.of(context).brightness),
+                  ),
+                ),
+              ],
               const SizedBox(height: 8),
               Expanded(
                 child: controller.loading.value
                     ? const PmLoadingSkeleton()
-                    : ListView.builder(
-                        itemCount: controller.results.length,
-                        itemBuilder: (context, index) {
-                          final station = controller.results[index];
-                          return PmStationTile(
-                            station: station,
-                            onTap: () {
-                              if (selecting) {
-                                Get.back(result: station);
-                              } else {
-                                Get.toNamed('/stations/${station.id}');
-                              }
+                    : controller.results.isEmpty
+                        ? PmEmptyState(
+                            title: chartOnly && !controller.chartReady.value
+                                ? 'Fare chart not loaded'
+                                : 'No matching station',
+                            message: chartOnly && !controller.chartReady.value
+                                ? 'Restart the app to load the fare chart.'
+                                : chartOnly
+                                    ? 'Try another station name from the chart.'
+                                    : 'Try another station name.',
+                            icon: Icons.payments_outlined,
+                          )
+                        : ListView.builder(
+                            itemCount: controller.results.length,
+                            itemBuilder: (context, index) {
+                              final station = controller.results[index];
+                              return PmStationTile(
+                                station: station,
+                                onTap: () {
+                                  if (selecting) {
+                                    Get.back(result: station);
+                                  } else {
+                                    Get.toNamed('/stations/${station.id}');
+                                  }
+                                },
+                              );
                             },
-                          );
-                        },
-                      ),
+                          ),
               ),
             ],
           ),

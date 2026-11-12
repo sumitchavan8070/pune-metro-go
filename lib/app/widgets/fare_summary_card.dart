@@ -5,32 +5,42 @@ import 'package:pune_metro_guide/app/widgets/pm_card.dart';
 import 'package:pune_metro_guide/models/fare_model.dart';
 
 class FareSummaryCard extends StatelessWidget {
-  const FareSummaryCard({super.key, required this.quote});
+  const FareSummaryCard({super.key, required this.quote, this.routeLabel});
 
   final FareQuote quote;
+  final String? routeLabel;
 
   @override
   Widget build(BuildContext context) {
+    final muted = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.72);
     return PmCard(
       child: quote.available
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Verified fare', style: AppTextStyles.caption),
+                Text('Chart fare', style: AppTextStyles.caption),
+                if (routeLabel != null) ...[
+                  const SizedBox(height: 4),
+                  Text(routeLabel!, style: AppTextStyles.titleMedium),
+                ],
                 const SizedBox(height: 4),
                 Text(
-                  '${quote.currency} ${quote.amount?.toStringAsFixed(0)}',
-                  style: AppTextStyles.headlineLarge,
+                  formatMoney(quote.currency, quote.amount),
+                  style: AppTextStyles.displayMedium,
                 ),
-                const SizedBox(height: 8),
-                Text('Source: ${quote.sourceName ?? 'Recorded source'}', style: AppTextStyles.bodySmall),
-                Text('Effective: ${formatDate(quote.validFrom)}', style: AppTextStyles.bodySmall),
+                if (quote.validFrom != null && quote.validFrom!.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    'Effective ${formatDate(quote.validFrom)}',
+                    style: AppTextStyles.bodySmall.copyWith(color: muted),
+                  ),
+                ],
               ],
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Verified fare unavailable', style: AppTextStyles.titleMedium),
+                Text('No fare shown', style: AppTextStyles.titleMedium),
                 const SizedBox(height: 6),
                 Text(quote.message, style: AppTextStyles.bodyMedium),
               ],

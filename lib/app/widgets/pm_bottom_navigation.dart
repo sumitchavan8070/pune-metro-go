@@ -14,7 +14,7 @@ class PmBottomNavigation extends StatelessWidget {
 
   static const _items = [
     (Icons.home_outlined, Icons.home, 'Home'),
-    (Icons.alt_route_outlined, Icons.alt_route, 'Plan Journey'),
+    (Icons.explore_outlined, Icons.explore, 'Explore'),
     (Icons.map_outlined, Icons.map, 'Metro Map'),
     (Icons.grid_view_outlined, Icons.grid_view_rounded, 'More'),
   ];

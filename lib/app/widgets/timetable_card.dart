@@ -3,7 +3,6 @@ import 'package:pune_metro_guide/app/theme/app_colors.dart';
 import 'package:pune_metro_guide/app/theme/app_radius.dart';
 import 'package:pune_metro_guide/app/theme/app_text_styles.dart';
 import 'package:pune_metro_guide/app/utils/formatters.dart';
-import 'package:pune_metro_guide/app/utils/status_labels.dart';
 import 'package:pune_metro_guide/app/widgets/pm_card.dart';
 import 'package:pune_metro_guide/models/timetable_model.dart';
 
@@ -38,17 +37,12 @@ class TimetableCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    historical ? 'Earlier published notice' : 'Scheduled data',
-                    style: AppTextStyles.caption.copyWith(color: historical ? AppColors.warning : muted),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    historical ? 'Historical service window' : 'Current service window',
+                    historical ? 'Earlier service window' : 'Current service window',
                     style: AppTextStyles.titleLarge,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${_direction(timetable.direction)} · ${verificationLabel(timetable.verificationStatus)}',
+                    _direction(timetable.direction),
                     style: AppTextStyles.bodySmall.copyWith(color: muted),
                   ),
                   const SizedBox(height: 14),
@@ -105,7 +99,7 @@ class TimetableCard extends StatelessWidget {
                   if (timetable.endToEndMinutes != null) ...[
                     const SizedBox(height: 12),
                     Text(
-                      'Published end-to-end time: ${timetable.endToEndMinutes} min'
+                      'End to end: ${timetable.endToEndMinutes} min'
                       '${timetable.publishedDistanceKm == null ? '' : ' · ${formatKilometres(timetable.publishedDistanceKm)}'}',
                       style: AppTextStyles.bodyMedium,
                     ),
@@ -115,19 +109,6 @@ class TimetableCard extends StatelessWidget {
                     'Effective ${formatDate(timetable.validFrom)}'
                     '${timetable.validUntil == null ? '' : ' until ${formatDate(timetable.validUntil)}'}',
                     style: AppTextStyles.bodySmall.copyWith(color: muted),
-                  ),
-                  Text(
-                    timetable.sourceName ?? 'Source recorded with the import',
-                    style: AppTextStyles.caption.copyWith(color: muted),
-                  ),
-                  if (timetable.notes != null) ...[
-                    const SizedBox(height: 8),
-                    Text(timetable.notes!, style: AppTextStyles.bodySmall),
-                  ],
-                  const SizedBox(height: 10),
-                  Text(
-                    'Station-by-station departure times are shown only when a source publishes them. This is a scheduled window, not a live prediction.',
-                    style: AppTextStyles.caption.copyWith(color: muted),
                   ),
                 ],
               ),

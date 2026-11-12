@@ -64,30 +64,6 @@ class SettingsView extends GetView<SettingsController> {
               ),
             ),
             const SizedBox(height: AppDimensions.spaceMd),
-            // PmCard(
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       Text('Reference data', style: AppTextStyles.titleLarge),
-            //       const SizedBox(height: 12),
-            //       _InfoRow(
-            //         label: 'Dataset',
-            //         value: controller.meta['dataset_version'] ?? 'Not imported',
-            //       ),
-            //       _InfoRow(label: 'Extracted', value: formatDate(controller.meta['extracted_at'])),
-            //       _InfoRow(
-            //         label: 'Saved on this phone',
-            //         value: formatDate(controller.meta['imported_at']),
-            //       ),
-            //       _InfoRow(
-            //         label: 'Database',
-            //         value: 'Schema v${AppConstants.databaseVersion}',
-            //         last: true,
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // const SizedBox(height: AppDimensions.spaceMd),
             const PmCard(
               child: _IconCopy(
                 icon: Icons.lock_outline,
@@ -107,7 +83,7 @@ class SettingsView extends GetView<SettingsController> {
                       icon: Icons.info_outline,
                       title: 'About',
                       body:
-                          'PuneMetro Go helps passengers read lines, stations, published service windows, and journey options. It does not show live train positions.',
+                          'PuneMetro Go helps passengers read lines, stations, service windows, and journey options. It does not show live train positions.',
                     ),
                   ),
                   Divider(height: 1, color: AppColors.border(brightness)),

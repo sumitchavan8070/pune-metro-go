@@ -67,7 +67,7 @@ Extracted 4 November 2026.
 | Not in passenger service | 27 |
 | Timetable rows | 4 (2 current, 2 expired Ganeshotsav notices) |
 | Station-by-station departures | 0 |
-| Fares | 0 |
+| Fares | 378 |
 | Open conflicts | 14 |
 | Stations without coordinates | District Court, Mandai, Ideal Colony, Mangalwar Peth, Pune Railway Station |
 
@@ -87,7 +87,7 @@ Official pages read on 4 November 2026:
 - https://www.pmrda.gov.in/en/pune-metro-line-3/
 - https://punerimetro.in/route/station-list
 
-`robots.txt` on those hosts allowed the public pages that were fetched. The fare form at `fare_chart.aspx` uses a CAPTCHA and was not extracted.
+`robots.txt` on those hosts allowed the public pages that were fetched. The fare form at `fare_chart.aspx` uses a CAPTCHA. The station-to-station amounts in the app were transcribed from the published fare chart image.
 
 Secondary, and labelled as such:
 
@@ -102,7 +102,7 @@ Not used as current data:
 
 ## What the app will not show
 
-- A verified station-to-station fare. The calculator says the fare is unavailable.
+- A fare for a pair that is not on the published Purple and Aqua chart, including Range Hill and Line 3. The calculator says so instead of guessing.
 - A departure minute at each station. Headways are shown as published frequencies only.
 - A Line 3 duration. No official end-to-end time was found.
 - Live train positions. `MetroLiveDataProvider` throws until an authorised feed is connected.

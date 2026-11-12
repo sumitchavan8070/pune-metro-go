@@ -18,7 +18,7 @@ class FareView extends GetView<FareController> {
           padding: const EdgeInsets.all(AppDimensions.screenPadding),
           children: [
             Text(
-              'A fare appears only when a verified fare record exists for the pair of stations.',
+              'Fares follow the Purple and Aqua chart. Pick two stations on that chart.',
               style: AppTextStyles.bodyMedium,
             ),
             const SizedBox(height: 16),
@@ -41,10 +41,23 @@ class FareView extends GetView<FareController> {
               onTap: () => controller.pick(false),
             ),
             const SizedBox(height: 16),
-            if (controller.quote.value != null) FareSummaryCard(quote: controller.quote.value!),
+            if (controller.quote.value != null)
+              FareSummaryCard(
+                quote: controller.quote.value!,
+                routeLabel: _routeLabel(),
+              ),
           ],
         ),
       ),
     );
+  }
+
+  String? _routeLabel() {
+    final from = controller.origin.value?.name;
+    final to = controller.destination.value?.name;
+    if (from == null || to == null) {
+      return null;
+    }
+    return '$from to $to';
   }
 }

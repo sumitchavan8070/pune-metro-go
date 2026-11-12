@@ -12,11 +12,13 @@ import 'package:pune_metro_guide/data/repositories/metro_repository.dart';
 import 'package:pune_metro_guide/data/repositories/timetable_repository.dart';
 import 'package:pune_metro_guide/data/repositories/user_repository.dart';
 import 'package:pune_metro_guide/data/services/dio_service.dart';
+import 'package:pune_metro_guide/data/services/app_release_service.dart';
 import 'package:pune_metro_guide/data/services/fare_calculator_service.dart';
 import 'package:pune_metro_guide/data/services/import_service.dart';
 import 'package:pune_metro_guide/data/services/journey_planner_service.dart';
 import 'package:pune_metro_guide/data/services/live/metro_live_data_provider.dart';
 import 'package:pune_metro_guide/data/services/location_service.dart';
+import 'package:pune_metro_guide/data/services/messaging_service.dart';
 import 'package:pune_metro_guide/data/services/pdf_extraction_service.dart';
 import 'package:pune_metro_guide/data/services/web_extraction_service.dart';
 import 'package:pune_metro_guide/modules/settings/controllers/theme_controller.dart';
@@ -44,8 +46,10 @@ class AppDependencies {
     Get.put(LocationService(), permanent: true);
     Get.put(const JourneyPlannerService(), permanent: true);
     Get.put(const FareCalculatorService(), permanent: true);
+    Get.put(AppReleaseService(FirebaseFirestore.instance, logger), permanent: true);
     Get.put<MetroLiveDataProvider>(const NoLiveFeedConnected(), permanent: true);
     Get.put(ThemeController(preferences), permanent: true);
+    Get.put(MessagingService(logger), permanent: true);
   }
 
   static Future<String> _deviceId(SharedPreferences preferences) async {

@@ -40,7 +40,7 @@ class PmMetroLineCard extends StatelessWidget {
                 Text(line.name, style: AppTextStyles.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 4),
                 Text(
-                  '${line.originName ?? 'Origin unpublished'} to ${line.destinationName ?? 'Destination unpublished'}',
+                  '${line.originName ?? 'Start'} to ${line.destinationName ?? 'End'}',
                   style: AppTextStyles.bodySmall.copyWith(color: muted),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -48,7 +48,7 @@ class PmMetroLineCard extends StatelessWidget {
                 if (operationalStations != null) ...[
                   const SizedBox(height: 6),
                   Text(
-                    '$operationalStations verified operational',
+                    '$operationalStations stations open',
                     style: AppTextStyles.caption.copyWith(color: muted),
                   ),
                 ],

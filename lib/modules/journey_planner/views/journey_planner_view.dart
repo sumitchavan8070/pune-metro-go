@@ -12,56 +12,69 @@ class JourneyPlannerView extends GetView<JourneyPlannerController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Obx(
-        () => ListView(
-          padding: const EdgeInsets.fromLTRB(
-            AppDimensions.screenPadding,
-            AppDimensions.spaceMd,
-            AppDimensions.screenPadding,
-            AppDimensions.spaceXl,
-          ),
-          children: [
-            Text('Plan Journey', style: AppTextStyles.headlineLarge),
-            const SizedBox(height: 6),
-            Text(
-              'Routes use stations that are open in the stored data. Closed and planned stations are refused.',
-              style: AppTextStyles.bodyMedium.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Plan Journey')),
+      body: SafeArea(
+        child: Obx(
+          () => ListView(
+            padding: const EdgeInsets.fromLTRB(
+              AppDimensions.screenPadding,
+              AppDimensions.spaceMd,
+              AppDimensions.screenPadding,
+              AppDimensions.spaceXl,
             ),
-            const SizedBox(height: 16),
-            PmJourneySearchCard(
-              origin: controller.origin.value?.name ?? 'Choose origin',
-              destination: controller.destination.value?.name ?? 'Choose destination',
-              onOrigin: controller.pickOrigin,
-              onDestination: controller.pickDestination,
-              onSwap: controller.swap,
-              loading: controller.planning.value,
-              onSearch: controller.planning.value ? null : controller.plan,
-            ),
-            if (controller.error.value != null) ...[
-              const SizedBox(height: 12),
-              Text(controller.error.value!, style: AppTextStyles.bodyMedium),
-            ],
-            const SizedBox(height: 16),
-            for (var index = 0; index < controller.plans.length; index++)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: controller.plans[index].success
-                    ? JourneyRouteCard(
-                        plan: controller.plans[index],
-                        index: index,
-                        onShowMap: controller.showOnMap,
-                      )
-                    : JourneyFailureCard(message: controller.plans[index].errorMessage ?? 'No route'),
+            children: [
+              Text(
+                'Routes use stations that are open. Closed and planned stations are left out.',
+                style: AppTextStyles.bodyMedium.copyWith(color: Theme.of(context).textTheme.bodySmall?.color),
               ),
-            if (controller.quote.value != null) ...[
-              Text('Fare', style: AppTextStyles.titleLarge),
-              const SizedBox(height: 8),
-              FareSummaryCard(quote: controller.quote.value!),
+              const SizedBox(height: 16),
+              PmJourneySearchCard(
+                origin: controller.origin.value?.name ?? 'Choose origin',
+                destination: controller.destination.value?.name ?? 'Choose destination',
+                onOrigin: controller.pickOrigin,
+                onDestination: controller.pickDestination,
+                onSwap: controller.swap,
+                loading: controller.planning.value,
+                onSearch: controller.planning.value ? null : controller.plan,
+              ),
+              if (controller.error.value != null) ...[
+                const SizedBox(height: 12),
+                Text(controller.error.value!, style: AppTextStyles.bodyMedium),
+              ],
+              const SizedBox(height: 16),
+              for (var index = 0; index < controller.plans.length; index++)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: controller.plans[index].success
+                      ? JourneyRouteCard(
+                          plan: controller.plans[index],
+                          index: index,
+                          onShowMap: controller.showOnMap,
+                        )
+                      : JourneyFailureCard(message: controller.plans[index].errorMessage ?? 'No route'),
+                ),
+              if (controller.quote.value != null) ...[
+                Text('Fare', style: AppTextStyles.titleLarge),
+                const SizedBox(height: 8),
+                FareSummaryCard(
+                  quote: controller.quote.value!,
+                  routeLabel: _fareRoute(controller),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
   }
+}
+
+String? _fareRoute(JourneyPlannerController controller) {
+  final from = controller.origin.value?.name;
+  final to = controller.destination.value?.name;
+  if (from == null || to == null) {
+    return null;
+  }
+  return '$from to $to';
 }

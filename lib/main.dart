@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:pune_metro_guide/app/app.dart';
 import 'package:pune_metro_guide/app/bindings/initial_binding.dart';
 import 'package:pune_metro_guide/data/firebase/firebase_options.dart';
+import 'package:pune_metro_guide/data/services/messaging_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,8 +16,10 @@ Future<void> main() async {
   if (maps is GoogleMapsFlutterAndroid) {
     maps.useAndroidViewSurface = true;
   }
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true);
   await AppDependencies.init();
   runApp(const PuneMetroApp());
+  await Get.find<MessagingService>().start();
 }

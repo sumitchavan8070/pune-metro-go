@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pune_metro_guide/app/routes/app_routes.dart';
 import 'package:pune_metro_guide/app/theme/app_colors.dart';
 import 'package:pune_metro_guide/app/theme/app_dimensions.dart';
 import 'package:pune_metro_guide/app/theme/app_text_styles.dart';
 import 'package:pune_metro_guide/app/utils/formatters.dart';
 import 'package:pune_metro_guide/app/utils/line_color.dart';
-import 'package:pune_metro_guide/app/utils/status_labels.dart';
 import 'package:pune_metro_guide/app/widgets/pm_buttons.dart';
 import 'package:pune_metro_guide/app/widgets/pm_card.dart';
 import 'package:pune_metro_guide/app/widgets/pm_feedback.dart';
@@ -13,7 +13,6 @@ import 'package:pune_metro_guide/app/widgets/pm_interchange_badge.dart';
 import 'package:pune_metro_guide/app/widgets/pm_route_timeline.dart';
 import 'package:pune_metro_guide/app/widgets/pm_status_chip.dart';
 import 'package:pune_metro_guide/modules/journey_planner/controllers/journey_planner_controller.dart';
-import 'package:pune_metro_guide/modules/shell/controllers/shell_controller.dart';
 import 'package:pune_metro_guide/modules/stations/controllers/station_controller.dart';
 
 class StationDetailView extends GetView<StationDetailController> {
@@ -75,8 +74,6 @@ class StationDetailView extends GetView<StationDetailController> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
-            Text(operationalStatus(station.operationalStatus).explanation, style: AppTextStyles.bodySmall.copyWith(color: muted)),
             if (station.description != null) ...[
               const SizedBox(height: 12),
               Text(station.description!, style: AppTextStyles.bodyMedium),
@@ -88,14 +85,14 @@ class StationDetailView extends GetView<StationDetailController> {
               stops: [
                 PmTimelineStop(
                   title: previous?.name ?? 'No previous station',
-                  subtitle: 'Previous in the published order',
+                  subtitle: 'Previous station',
                   dimmed: previous == null,
                   onTap: previous == null ? null : () => Get.offNamed('/stations/${previous.id}'),
                 ),
                 PmTimelineStop(title: station.name, subtitle: 'This station', interchange: station.isInterchange),
                 PmTimelineStop(
                   title: next?.name ?? 'No next station',
-                  subtitle: 'Next in the published order',
+                  subtitle: 'Next station',
                   dimmed: next == null,
                   onTap: next == null ? null : () => Get.offNamed('/stations/${next.id}'),
                 ),
@@ -104,11 +101,11 @@ class StationDetailView extends GetView<StationDetailController> {
             Text('Interchange', style: AppTextStyles.titleLarge),
             const SizedBox(height: 6),
             if (controller.interchanges.isEmpty && controller.lines.length < 2)
-              Text('No separate interchange record is stored.', style: AppTextStyles.bodyMedium)
+              Text('No interchange is listed for this station.', style: AppTextStyles.bodyMedium)
             else ...[
               if (controller.lines.length > 1)
                 Text(
-                  'This station is on more than one line. Transfer time inside the station was not published.',
+                  'This station is on more than one line.',
                   style: AppTextStyles.bodyMedium,
                 ),
               for (final interchange in controller.interchanges)
@@ -117,8 +114,7 @@ class StationDetailView extends GetView<StationDetailController> {
                   title: Text(interchange.interchangeName ?? 'Interchange', style: AppTextStyles.titleMedium),
                   subtitle: Text(
                     '${interchange.fromName} and ${interchange.toName}. '
-                    '${interchange.walkingMinutes == null ? 'Walking time was not published.' : '${interchange.walkingMinutes} min walk.'} '
-                    '${interchange.notes ?? ''}',
+                    '${interchange.walkingMinutes == null ? 'Walking time is not listed.' : '${interchange.walkingMinutes} min walk.'}',
                     style: AppTextStyles.bodySmall.copyWith(color: muted),
                   ),
                 ),
@@ -128,44 +124,31 @@ class StationDetailView extends GetView<StationDetailController> {
             const SizedBox(height: 6),
             if (controller.facilities.isEmpty)
               Text(
-                'Verified station-by-station facilities are not available. Line-wide claims, where an operator published them, are on the line page.',
+                'Station facilities are not listed yet.',
                 style: AppTextStyles.bodyMedium,
               )
             else
               for (final facility in controller.facilities)
                 Text(
-                  '${facility.facilityType}: ${facility.description ?? ''} (${verificationLabel(facility.verificationStatus)})',
+                  '${facility.facilityType}${facility.description == null || facility.description!.isEmpty ? '' : ': ${facility.description}'}',
                   style: AppTextStyles.bodyMedium,
                 ),
-            const SizedBox(height: 12),
-            Text('Location', style: AppTextStyles.titleLarge),
-            const SizedBox(height: 6),
-            Text(station.address ?? 'A street address was not published.', style: AppTextStyles.bodyMedium),
-            Text(
-              station.hasCoordinates
-                  ? 'Map pin ${station.latitude!.toStringAsFixed(5)}, ${station.longitude!.toStringAsFixed(5)} · ${verificationLabel(station.coordinateVerification ?? 'unavailable')}. ${station.coordinateNotes ?? ''}'
-                  : 'No coordinate is stored. The map will not place a pin for this station.',
-              style: AppTextStyles.bodySmall.copyWith(color: muted),
-            ),
+            if (station.address != null) ...[
+              const SizedBox(height: 12),
+              Text('Location', style: AppTextStyles.titleLarge),
+              const SizedBox(height: 6),
+              Text(station.address!, style: AppTextStyles.bodyMedium),
+            ],
             const SizedBox(height: 12),
             Text('Service', style: AppTextStyles.titleLarge),
             if (controller.timetables.isEmpty)
-              Text('No current line timetable is stored.', style: AppTextStyles.bodyMedium)
+              Text('No service window is listed for this station.', style: AppTextStyles.bodyMedium)
             else
               for (final table in controller.timetables)
                 Text(
                   '${table.lineName}: first ${formatClock(table.firstTrainTime)}, last ${formatClock(table.lastTrainTime)}.',
                   style: AppTextStyles.bodyMedium,
                 ),
-            const SizedBox(height: 12),
-            Text(
-              'Station record: ${verificationLabel(station.verificationStatus)}. Opening status: ${verificationLabel(station.statusVerification)}. Source: ${station.sourceName ?? 'Recorded with the import'}.',
-              style: AppTextStyles.caption.copyWith(color: muted),
-            ),
-            if (station.notes != null) ...[
-              const SizedBox(height: 8),
-              Text(station.notes!, style: AppTextStyles.bodySmall),
-            ],
             if (controller.aliases.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text('Also called ${controller.aliases.map((alias) => alias.alias).join(', ')}.', style: AppTextStyles.bodySmall),
@@ -177,7 +160,7 @@ class StationDetailView extends GetView<StationDetailController> {
                   ? () {
                       Get.find<JourneyPlannerController>().prefill(station.id, null);
                       Get.until((route) => route.isFirst);
-                      Get.find<ShellController>().select(1);
+                      Get.toNamed(AppRoutes.plan);
                     }
                   : null,
             ),

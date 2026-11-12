@@ -76,13 +76,14 @@ class HomeView extends GetView<HomeController> {
                     ? null
                     : () async {
                         if (planner.origin.value == null || planner.destination.value == null) {
-                          Get.find<ShellController>().select(1);
+                          Get.toNamed(AppRoutes.plan);
                           return;
                         }
                         await planner.plan();
-                        Get.find<ShellController>().select(1);
+                        Get.toNamed(AppRoutes.plan);
                       },
               ),
+              const SizedBox(height: AppDimensions.spaceMd),
               const PmSectionHeader(title: 'Metro lines', action: 'All lines', onAction: _openLines),
               for (final line in controller.lines)
                 Padding(
@@ -127,11 +128,6 @@ class HomeView extends GetView<HomeController> {
                 const PmSectionHeader(title: 'Service alerts'),
                 for (final alert in controller.alerts) PmServiceAlertCard(alert: alert),
               ],
-              const SizedBox(height: AppDimensions.spaceMd),
-              PmLastUpdatedLabel(
-                extractedAt: controller.extractedAt.value,
-                importedAt: controller.importedAt.value,
-              ),
             ],
           ),
         );

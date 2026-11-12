@@ -11,7 +11,7 @@ class FareController extends GetxController {
   final quote = Rxn<FareQuote>();
 
   Future<void> pick(bool isOrigin) async {
-    final selected = await Get.toNamed(AppRoutes.pickStation, arguments: 'pick');
+    final selected = await Get.toNamed(AppRoutes.pickStation, arguments: 'fare');
     if (selected is! StationModel) {
       return;
     }
