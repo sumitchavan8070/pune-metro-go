@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:pune_metro_guide/app/constants/app_constants.dart';
 import 'package:pune_metro_guide/app/widgets/app_update_dialog.dart';
 import 'package:pune_metro_guide/data/services/app_release_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,9 +49,7 @@ class ShellController extends GetxController {
         title: const Text('Disclaimer'),
         content: const Padding(
           padding: EdgeInsets.only(top: 8),
-          child: Text(
-            'PuneMetro Go is an independent guide. It is not the official Maha Metro or Pune Metro app. This app does not sell tickets and does not show live trains.',
-          ),
+          child: Text(AppConstants.disclaimer),
         ),
         actions: [
           CupertinoDialogAction(

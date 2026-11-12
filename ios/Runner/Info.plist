@@ -7,9 +7,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>PuneMetro Go uses your location only when you ask for nearby stations, so it can measure distance to stations that have published coordinates. Location is not tracked in the background.</string>
+	<string>Pune Transit Guide uses your location only when you ask for nearby stations, so it can measure distance to stations that have published coordinates. Location is not tracked in the background.</string>
 	<key>CFBundleDisplayName</key>
-	<string>PuneMetro Go</string>
+	<string>Pune Transit Guide</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,7 +17,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>PuneMetro Go</string>
+	<string>Pune Transit Guide</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

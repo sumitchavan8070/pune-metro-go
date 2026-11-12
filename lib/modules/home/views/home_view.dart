@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pune_metro_guide/app/constants/app_constants.dart';
 import 'package:pune_metro_guide/app/routes/app_routes.dart';
 import 'package:pune_metro_guide/app/theme/app_colors.dart';
 import 'package:pune_metro_guide/app/theme/app_dimensions.dart';
@@ -55,6 +56,23 @@ class HomeView extends GetView<HomeController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: Image.asset(AppConstants.logoAsset, width: 22, height: 22),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              AppConstants.appName,
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: muted,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
                         Text(_greeting(), style: AppTextStyles.bodyMedium.copyWith(color: muted)),
                         const SizedBox(height: 2),
                         Text('Pune', style: AppTextStyles.headlineLarge),

@@ -19,7 +19,7 @@ class MoreView extends StatelessWidget {
 
       body: ListView(
         children: [
-          const PmLogo(width: 160),
+          // const PmLogo(width: 160),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

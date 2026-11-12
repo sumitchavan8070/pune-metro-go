@@ -37,6 +37,7 @@ class SettingsView extends GetView<SettingsController> {
               child: Column(
                 children: [
                   const PmLogo(width: 168),
+
                   const SizedBox(height: 12),
                   Text(AppConstants.appName, style: AppTextStyles.headlineMedium),
                   const SizedBox(height: 4),
@@ -83,7 +84,7 @@ class SettingsView extends GetView<SettingsController> {
                       icon: Icons.info_outline,
                       title: 'About',
                       body:
-                          'PuneMetro Go helps passengers read lines, stations, service windows, and journey options. It does not show live train positions.',
+                          'Pune Transit Guide helps passengers read metro lines, stations, timetables, fares, and journey options. It does not show live train positions.\n\n${AppConstants.disclaimer}',
                     ),
                   ),
                   Divider(height: 1, color: AppColors.border(brightness)),

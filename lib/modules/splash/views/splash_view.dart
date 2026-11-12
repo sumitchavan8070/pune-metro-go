@@ -19,10 +19,41 @@ class SplashView extends GetView<SplashController> {
         body: Stack(
           fit: StackFit.expand,
           children: [
+            // Background scene only; logo and name are drawn below.
             Image.asset(
               AppConstants.splashAsset,
               fit: BoxFit.cover,
-              alignment: Alignment.center,
+              alignment: Alignment.bottomCenter,
+            ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(24, 56, 24, 0),
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: Image.asset(AppConstants.logoAsset, width: 104, height: 104),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      AppConstants.appName,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.headlineLarge.copyWith(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      AppConstants.tagline,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.white.withValues(alpha: 0.85),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             Obx(() {
               if (controller.loading.value) {

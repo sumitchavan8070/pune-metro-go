@@ -1,4 +1,4 @@
-# Pune Metro Guide
+# Pune Transit Guide
 
 Passenger guide for the Pune Metro. Reference data is stored in Cloud Firestore and cached on the phone. The app does not invent train numbers, per-station departure times, fares, or live positions.
 

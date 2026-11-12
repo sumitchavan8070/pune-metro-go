@@ -69,8 +69,8 @@ class AppReleaseConfig {
       return value;
     }
     return maintenance
-        ? 'PuneMetro Go is unavailable right now. Please try again later.'
-        : 'A newer version of PuneMetro Go is ready.';
+        ? 'Pune Transit Guide is unavailable right now. Please try again later.'
+        : 'A newer version of Pune Transit Guide is ready.';
   }
 }
 

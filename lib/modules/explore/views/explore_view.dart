@@ -151,7 +151,7 @@ class _ExploreBanner extends StatelessWidget {
           Text('Explore Pune', style: AppTextStyles.headlineLarge.copyWith(color: AppColors.white)),
           const SizedBox(height: 6),
           Text(
-            'Discover amazing places around Pune Metro.',
+            'Discover places near Pune metro stations.',
             style: AppTextStyles.bodyMedium.copyWith(color: AppColors.white.withValues(alpha: 0.92)),
           ),
         ],

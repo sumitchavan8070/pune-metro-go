@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Brand tokens for PuneMetro Go.
+/// Brand tokens for Pune Transit Guide.
 /// Metro line colours stay on each line record and are not defined here.
 class AppColors {
   const AppColors._();

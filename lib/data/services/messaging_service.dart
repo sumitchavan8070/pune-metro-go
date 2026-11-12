@@ -61,7 +61,7 @@ class MessagingService {
           const AndroidNotificationChannel(
             campaignChannelId,
             'Campaigns',
-            description: 'Messages sent to PuneMetro Go',
+            description: 'Messages sent to Pune Transit Guide',
             importance: Importance.high,
           ),
         );
@@ -81,7 +81,7 @@ class MessagingService {
         android: AndroidNotificationDetails(
           campaignChannelId,
           'Campaigns',
-          channelDescription: 'Messages sent to PuneMetro Go',
+          channelDescription: 'Messages sent to Pune Transit Guide',
           importance: Importance.high,
           priority: Priority.high,
           icon: '@mipmap/ic_launcher',
